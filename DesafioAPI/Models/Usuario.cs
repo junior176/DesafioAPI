@@ -1,5 +1,8 @@
-﻿namespace DesafioAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DesafioAPI.Models
 {
+    [Table("Usuario")]
     public class Usuario
     {
         public int Id { get; set; }

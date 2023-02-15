@@ -1,3 +1,4 @@
+using DesafioAPI.Context;
 using DesafioAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,12 +19,11 @@ namespace DesafioAPI.Controllers
         [HttpGet(Name = "GetUsuario")]
         public IEnumerable<Usuario> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new Usuario
+            using (var db = new UsuarioContext())
             {
-                Id = Random.Shared.Next(0, 55),
-                Email = "cliente@email.com",
-                Nome = "Nome usuario"
-            }).ToArray();
+               return db.Usuarios.ToList();
+            }
+
         }
     }
 }

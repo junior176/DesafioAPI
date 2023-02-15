@@ -4,15 +4,15 @@ using System.Data.SqlClient;
 
 namespace DesafioAPI.Utils
 {
-    public static class Database
+    public static class DbDesafio
     {
         public static string getConnectionString()
         {
             string ipServidor = "127.0.0.1";
             string banco = "DesafioLuizaLabs";
-            string usuario = "user";
-            string senha = "user123";
-            string conexao = @"Server=" + ipServidor + ";Database=" + banco + ";Password=" + senha + ";User ID="+ usuario;
+            string usuario = "api";
+            string senha = "19pi(#Ab283";
+            string conexao = @"Data Source=" + ipServidor + ";Persist Security Info=True;Password=" + senha + ";User ID="+ usuario + ";Initial Catalog=" + banco + ";TrustServerCertificate=True";
 
             return conexao;
         }
