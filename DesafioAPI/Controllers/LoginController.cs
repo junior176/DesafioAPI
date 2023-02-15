@@ -1,31 +1,41 @@
 using DesafioAPI.Context;
 using DesafioAPI.Models;
+using DesafioAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : ControllerBase
+    public class LoginController : ControllerBase
     {
         
-        private readonly ILogger<UsuarioController> _logger;
+        private readonly ILogger<LoginController> _logger;
 
-        public UsuarioController(ILogger<UsuarioController> logger)
+        public LoginController(ILogger<LoginController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetUsuario")]
-        public IEnumerable<Usuario> Get()
+
+
+        [HttpGet]
+        [Route("getTokenTeste")]
+        public async Task<IActionResult> getTokenTeste()
         {
+            
             using (var db = new UsuarioContext())
             {
-               return db.Usuarios.ToList();
+                Usuario usuario = db.Usuarios.Where(e => e.Id == 2).First();
+                return Ok(TokenService.GetToken(usuario));
+
             }
 
-        }
+            return Ok();
 
+        }
+        
+        /*
         [HttpPost(Name = "AddUsuario")]
         public bool Add()
         {
@@ -42,6 +52,6 @@ namespace DesafioAPI.Controllers
                 return true;
             }
 
-        }
+        }*/
     }
 }

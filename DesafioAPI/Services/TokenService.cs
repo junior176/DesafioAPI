@@ -10,22 +10,23 @@ namespace DesafioAPI.Services
 {
     public class TokenService
     {
-        public static string GerarToken(Usuario user)
+        public static string GetToken(Usuario user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(PrivateKeyJWT.Key);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
+
+            var token = new JwtSecurityToken(
+                expires: DateTime.Now.AddHours(1),
+                claims: new Claim[]
                 {
+                    new Claim(ClaimTypes.PrimarySid, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.Nome.ToString()),
                     new Claim(ClaimTypes.Email, user.Email.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                },
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
         }
     }
 }

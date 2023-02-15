@@ -20,7 +20,12 @@ namespace DesafioAPI.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(DbDesafio.getConnectionString());
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json")
+                   .Build();
+                var connectionString = configuration.GetConnectionString("DbConnectionString");
+                optionsBuilder.UseSqlServer(connectionString);
             }
         }
 
