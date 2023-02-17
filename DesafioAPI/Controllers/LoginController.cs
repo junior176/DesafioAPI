@@ -1,6 +1,8 @@
 using DesafioAPI.Context;
 using DesafioAPI.Models;
 using DesafioAPI.Services;
+using DesafioAPI.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioAPI.Controllers
@@ -18,6 +20,75 @@ namespace DesafioAPI.Controllers
         }
 
 
+        [HttpPost]
+        [Route("Logar")]
+        public IActionResult Logar([FromForm] string Email, [FromForm] string Senha)
+        {
+
+            using (var db = new UsuarioContext())
+            {
+                bool existe = db.Usuarios.Where(u => u.Email == Email).Any();
+
+                if (!existe)
+                {
+                    return NotFound();
+                }
+
+                Usuario usuario = db.Usuarios.Where(e => e.Email == Email).First();
+
+                if (usuario.Senha != Cryptography.MD5Encript(Senha)) return Unauthorized();
+                if (usuario.Ativo) 
+                {
+                    Random generator = new Random();
+                    int codigo = generator.Next(100000, 999999);
+
+                    usuario.CodigoLogin = codigo.ToString();
+                    db.SaveChanges();
+
+                    EmailService.EnviarEmailLogin(codigo.ToString());
+                    return Ok(TokenService.GetToken(usuario));
+                }
+                else
+                {
+                    return  StatusCode(StatusCodes.Status403Forbidden);
+                }
+                
+
+            }
+
+        }
+
+        [HttpPost]
+        [Route("ValidarCodigo")]
+        [Authorize]
+        public IActionResult ValidarCodigo([FromForm] string Email, [FromForm] string codigo)
+        {
+
+            using (var db = new UsuarioContext())
+            {
+                bool existe = db.Usuarios.Where(u => u.Email == Email).Any();
+
+                if (!existe)
+                {
+                    return NotFound();
+                }
+
+                Usuario usuario = db.Usuarios.Where(e => e.Email == Email).First();
+
+                if (usuario.CodigoLogin != codigo) 
+                { 
+                    return Unauthorized(); 
+                }
+                else
+                {
+                    usuario.CodigoLogin = "";
+                    db.SaveChanges();
+                    return Ok(usuario.Nome);
+                }
+
+            }
+
+        }
 
         [HttpGet]
         [Route("getTokenTeste")]
@@ -27,31 +98,12 @@ namespace DesafioAPI.Controllers
             using (var db = new UsuarioContext())
             {
                 Usuario usuario = db.Usuarios.Where(e => e.Id == 2).First();
-                return Ok(TokenService.GetToken(usuario));
+                return usuario.Ativo ? Ok(TokenService.GetToken(usuario)) : StatusCode(StatusCodes.Status403Forbidden);
 
             }
-
-            return Ok();
 
         }
         
-        /*
-        [HttpPost(Name = "AddUsuario")]
-        public bool Add()
-        {
-            using (var db = new UsuarioContext())
-            {
-                Usuario usuario = new Usuario();
-                usuario.Nome = "Teste usuario";
-                usuario.Email = "cliente@email.com";
-                usuario.Senha = "ad21sa3d21sad54sa6d54a6s54d";
 
-                db.Usuarios.Add(usuario);
-                db.SaveChanges();
-
-                return true;
-            }
-
-        }*/
     }
 }

@@ -17,7 +17,7 @@ namespace DesafioAPI.Controllers
         [Route("autenticadoTeste")]
         [Authorize]
         public string GetAuthenticated() {
-            EmailService.EnviarEmailAsync();
+            
             return $"Autenticado - {User?.Identity?.Name} ";
         } 
     }

@@ -42,6 +42,12 @@ namespace DesafioAPI.Context
                 entity.Property(u => u.Email).HasColumnName("Email").HasMaxLength(150);
 
                 entity.Property(e => e.Senha).HasColumnName("Senha");
+
+                entity.Property(e => e.Ativo).HasColumnName("Ativo");
+
+                entity.Property(e => e.CodigoLogin).HasColumnName("CodLogin");
+
+                entity.Property(e => e.CodigoRecuperarSenha).HasColumnName("CodRecuperarSenha");
             });
 
             OnModelCreatingPartial(modelBuilder);
