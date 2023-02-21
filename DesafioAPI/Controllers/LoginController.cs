@@ -46,7 +46,7 @@ namespace DesafioAPI.Controllers
                     usuario.CodigoLogin = codigo.ToString();
                     db.SaveChanges();
 
-                    EmailService.EnviarEmailLogin(codigo.ToString());
+                    EmailService.EnviarEmailLogin(codigo.ToString(), usuario.Email, usuario.Nome);
                     return Ok(TokenService.GetToken(usuario));
                 }
                 else

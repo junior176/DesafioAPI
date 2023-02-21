@@ -50,18 +50,18 @@ namespace DesafioAPI.Services
                 mail.Dispose();
             }
         }
-        public static async Task EnviarEmailLogin(string codigo)
+        public static async Task EnviarEmailLogin(string codigo, string email, string nome)
         {
 
             MailMessage mail = new()
             {
                 From = new MailAddress(emailEnvio, "Desafio LuizaLabs")
             };
-            mail.To.Add(new MailAddress("junior.176@outlook.com"));
+            mail.To.Add(new MailAddress(email));
 
             string textoEmail = "<html><body style='background-color: #fdf9f9; text-align: center;'>" +
             "<img src='https://juvenal.com.br/luizalabs/logoLuizaLabs.png' height='100'><br>" +
-            " Olá <strong>Juvenal Viana</strong><br>" +
+            " Olá <strong>"+nome+"</strong><br>" +
             " Precisamos da sua confirmação para liberar a página que você está tentando acessar.<br>" +
             " Retorne à página e digite o código:<br><br>" +
             " <strong>"+ codigo + "</strong><br><br>" +
