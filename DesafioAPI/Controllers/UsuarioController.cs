@@ -2,6 +2,7 @@ using DesafioAPI.Context;
 using DesafioAPI.Models;
 using DesafioAPI.Services;
 using DesafioAPI.Utils;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -107,6 +108,28 @@ namespace DesafioAPI.Controllers
                 db.SaveChanges();
                 EmailService.EnviarEmailRecuperarSenha(Email, codRecuperacao);
                 return Ok();
+
+            }
+
+        }
+
+        [HttpPost]
+        [Route("getEmailRecuperado")]
+        public IActionResult getEmailRecuperado([FromForm] string Codigo)
+        {
+
+            using (var db = new UsuarioContext())
+            {
+                bool existe = db.Usuarios.Where(u => u.CodigoRecuperarSenha == Codigo).Any();
+
+                if (!existe)
+                {
+                    return NotFound();
+                }
+
+                Usuario usuario = db.Usuarios.Where(e => e.CodigoRecuperarSenha == Codigo).First();
+
+                return Ok(usuario.Email);
 
             }
 

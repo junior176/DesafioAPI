@@ -9,6 +9,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 //AddAuthentication
 builder.Services.AddAuthentication(options =>
 {
@@ -61,26 +62,28 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddCors(p => p.AddPolicy("corsLuizaLabs", builder =>
-{
-    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
+
+
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
-app.UseCors("corsLuizaLabs");
-app.UseHttpsRedirection();
+
+app.UseCors(
+  options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()
+      );
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run("https://localhost:5001");
+app.Run();

@@ -14,6 +14,8 @@ namespace DesafioAPI.Services
         static string emailEnvio = "desafioluizalabsjuvenal@gmail.com";
         static string senhaEmail = "gglopxmickkocjmz";
         static string smtpEmail = "smtp.gmail.com";
+        //static string urlBase = "https://localhost/luizalabs/";
+        static string urlBase = "https://juvenal.com.br/luizalabs/";
         static int porta = 587;
 
         public static async Task EnviarEmailCadastro(string nome, string email)
@@ -28,7 +30,7 @@ namespace DesafioAPI.Services
             "<img src='https://juvenal.com.br/luizalabs/logoLuizaLabs.png' height='100'><br>" +
             " Olá <strong>"+ nome + "</strong><br>" +
             " Sua conta está quase pronta. Para ativá-la, por favor confirme o seu endereço de email clicando no link abaixo.<br><br>"+
-            " <a href='https://localhost/luizalabs/ativarconta-"+Convert.ToBase64String(Encoding.UTF8.GetBytes(email)) +"' target='new'>Confirmar meu email</a><br><br>"+
+            " <a href='"+ urlBase + "?ativarConta="+Convert.ToBase64String(Encoding.UTF8.GetBytes(email)) +"' target='new'>Confirmar meu email</a><br><br>"+
             " Sua conta não será ativada até que seu email seja confirmado.<br>" +
             " Se você não se cadastrou recentemente, por favor ignore este email.<br><br>" +
             " Atenciosamente,<br>" +
@@ -92,7 +94,7 @@ namespace DesafioAPI.Services
             "<img src='https://juvenal.com.br/luizalabs/logoLuizaLabs.png' height='100'><br>" +
             " Olá<br>" +
             " Para alterar sua senha, acesso o link abaixo.<br><br>" +
-            " <a href='https://localhost/luizalabs/recuperarSenha-" + email + "' target='new'>Recuperar Senha</a><br><br>" +
+            " <a href='"+ urlBase + "?recuperarSenha=" + email + "' target='new'>Recuperar Senha</a><br><br>" +
             " Se você não solicitou, por favor ignore este email.<br><br>" +
             " Atenciosamente,<br>" +
             " LuizaLabs" +

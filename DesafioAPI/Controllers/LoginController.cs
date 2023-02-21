@@ -3,6 +3,7 @@ using DesafioAPI.Models;
 using DesafioAPI.Services;
 using DesafioAPI.Utils;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioAPI.Controllers
@@ -90,19 +91,6 @@ namespace DesafioAPI.Controllers
 
         }
 
-        [HttpGet]
-        [Route("getTokenTeste")]
-        public async Task<IActionResult> getTokenTeste()
-        {
-            
-            using (var db = new UsuarioContext())
-            {
-                Usuario usuario = db.Usuarios.Where(e => e.Id == 2).First();
-                return usuario.Ativo ? Ok(TokenService.GetToken(usuario)) : StatusCode(StatusCodes.Status403Forbidden);
-
-            }
-
-        }
         
 
     }
